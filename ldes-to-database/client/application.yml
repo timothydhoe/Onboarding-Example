@@ -1,0 +1,14 @@
+logging:
+  level:
+    root: WARN
+    org.openldes: INFO
+
+orchestrator:
+  directory: /ldio/pipelines
+
+
+spring:
+  datasource:
+    url: "jdbc:postgresql://client-postgresdb:5432/occupancy"
+    username: "dbuser"
+    password: "dbpass"

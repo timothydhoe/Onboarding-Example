@@ -1,0 +1,69 @@
+# This is a pipeline for demonstrating the consuming of an LDES stream and storing the data in a database using the RDF to Database component (LdioRdbOut).
+name: ldes-to-db-pipeline
+description: "Synchronizes parking occupancy data from the city of Ghent that is published on our LDES server, with a local PostgreSQL database using the RDF to Database component (LdioRdbOut)."
+input:
+  name: Ldio:LdesClient
+  config:
+    urls:
+      - http://host.docker.internal:8080/occupancy/by-parking
+    sourceFormat: text/turtle
+    retries:
+      enabled: true
+outputs:
+  - name: Ldio:ConsoleOut
+  - name: Ldio:LdioRdbOut
+    config:
+      table-name: occupancy
+      sparql-select-query: |-
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX terms: <http://purl.org/dc/terms/>
+        PREFIX mobivoc: <http://schema.mobivoc.org/#>
+        PREFIX schema: <http://schema.org/>
+        PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+        SELECT ?parking ?type ?label ?is_version_of ?modified ?total_capacity ?current_value 
+              ?operator ?free_of_charge ?url ?opening_hours ?latitude ?longitude
+        WHERE {
+            ?parking rdf:type ?type .
+            FILTER (?type IN (mobivoc:ParkingLot, mobivoc:ParkingGarage))
+        
+            OPTIONAL { ?parking rdfs:label ?label . }
+            OPTIONAL { ?parking terms:isVersionOf ?is_version_of . }
+            OPTIONAL { ?parking terms:modified ?modified . }
+            OPTIONAL {
+                ?parking mobivoc:capacity ?totalCap .
+                ?totalCap rdf:type mobivoc:Capacity ;
+                mobivoc:totalCapacity ?total_capacity .
+            }
+            OPTIONAL {
+                ?parking mobivoc:capacity ?rtCap .
+                ?rtCap rdf:type mobivoc:RealTimeCapacity ;
+                mobivoc:currentValue ?current_value .
+            }
+            OPTIONAL {
+                ?parking mobivoc:operatedBy ?op .
+                ?op rdfs:label ?operator .
+            }
+            OPTIONAL {
+                ?parking mobivoc:price ?price .
+                ?price mobivoc:freeOfCharge ?foc .
+                BIND(xsd:boolean(?foc) AS ?free_of_charge)
+            }
+            OPTIONAL { ?parking mobivoc:url ?url . }
+            OPTIONAL {
+                ?parking schema:openingHoursSpecification ?ohs .
+                ?ohs rdfs:label ?opening_hours .
+            }
+            OPTIONAL { 
+                ?parking wgs84_pos:lat ?lat .
+                BIND(xsd:double(?lat) AS ?latitude)
+            }
+            OPTIONAL { 
+                ?parking wgs84_pos:long ?long . 
+                BIND(xsd:double(?long) AS ?longitude)
+            }
+        }
+        ORDER BY ?label ?modified
+      ignore-duplicate-key-exception: true

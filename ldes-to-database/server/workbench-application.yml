@@ -1,0 +1,8 @@
+logging:
+  level:
+    root: WARN
+    org.openldes: DEBUG
+
+orchestrator:
+  directory: /ldio/pipelines
+
