@@ -1,0 +1,67 @@
+name: ldes-server
+
+networks:
+  openldes-network:
+    name: openldes-network
+
+services:
+  ldes-postgresdb:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+    ports:
+      - 5433:5432
+    networks:
+      - openldes-network
+
+
+  ldes-server:
+    image: openldes/ldes-server:latest
+    environment:
+      - SIS_DATA=/tmp
+      - SERVER_SERVLET_CONTEXTPATH=/
+#      - LDESSERVER_HOSTNAME=http://localhost:8080
+      - LDESSERVER_HOSTNAME=http://host.docker.internal:8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ldes-postgresdb:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_BATCH_JDBC_INITIALIZESCHEMA=always
+      - MANAGEMENT_TRACING_ENABLED=false
+    volumes:
+      - ./server/server-application.yml:/application.yml:ro
+    ports:
+      - 8080:8080
+    networks:
+      - openldes-network
+    depends_on:
+      - ldes-postgresdb
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://ldes-server:8080/actuator/health"]
+
+  init-ldes-server:
+    image: curlimages/curl:8.19.0
+    depends_on:
+      ldes-server:
+        condition: service_healthy
+    networks:
+      - openldes-network
+    volumes:
+      - ./server:/definitions:ro
+    entrypoint: ["sh", "-c", "curl -X POST -H 'content-type: text/turtle' 'http://ldes-server:8080/admin/api/v1/eventstreams' -d '@/definitions/occupancy.ttl' && curl -X POST -H 'content-type: text/turtle' 'http://ldes-server:8080/admin/api/v1/eventstreams/occupancy/views' -d '@/definitions/occupancy.by-page.ttl' && curl -X POST -H 'content-type: text/turtle' 'http://ldes-server:8080/admin/api/v1/eventstreams/occupancy/views' -d '@/definitions/occupancy.by-time.ttl' && curl -X POST -H 'content-type: text/turtle' 'http://ldes-server:8080/admin/api/v1/eventstreams/occupancy/views' -d '@/definitions/occupancy.by-location.ttl' && curl -X POST -H 'content-type: text/turtle' 'http://ldes-server:8080/admin/api/v1/eventstreams/occupancy/views' -d '@/definitions/occupancy.by-parking.ttl'"]
+
+  ldio-workbench:
+    image: openldes/ldi-orchestrator:latest
+    volumes:
+      - ./server/workbench-application.yml:/ldio/application.yml:ro
+      - ./server/occupancy-pipeline.yml:/ldio/pipelines/occupancy-pipeline.yml:ro
+    ports:
+      - 8081:8080
+    networks:
+      - openldes-network
+    depends_on:
+      ldes-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://ldio-workbench:8080/actuator/health"]

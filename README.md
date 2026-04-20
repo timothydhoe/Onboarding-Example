@@ -90,6 +90,7 @@ if you are already familiar with some topics.
 ### Tutorials for Data Clients
 
 * [Setting up a minimal LDES Client](./minimal-client/README.md) (consuming a local LDES)
+* [Read from a LDES server and store events in a database](./ldes-to-database/README.md) (consuming a local LDES and storing it in a database)
 * [Consuming a public LDES](./public-ldes/README.md) (accessing a public LDES)
 * [Consuming a protected LDES](./protected-setup/README.md#access-the-ldes-server-through-the-reverse-proxy) (
   accessing a non-public LDES)

@@ -1,0 +1,33 @@
+name: ldes-client-to-database
+
+networks:
+  client-network:
+    name: client-network
+
+services:
+  client-postgresdb:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=occupancy
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+    ports:
+      - 5432:5432
+    networks:
+      - client-network
+    volumes:
+      - ./client/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+
+  client-workbench:
+    image: ghcr.io/openldes/ldi-orchestrator:3.1.0-SNAPSHOT-20260420124138
+    volumes:
+      - ./client/application.yml:/ldio/application.yml:ro
+      - ./client/ldes-to-db-pipeline.yaml:/ldio/pipelines/ldes-to-db-pipeline.yaml:ro
+    ports:
+      - 8090:8080
+    networks:
+      - client-network
+    depends_on:
+      - client-postgresdb
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://client-workbench:8080/actuator/health"]
