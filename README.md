@@ -6,15 +6,17 @@ that [linked data](https://en.wikipedia.org/wiki/Linked_data) can be consumed.
 
 ## Example Data Set
 
-We start from a continuous feed of data containing the real time occupancy of public parkings
+We start from a continuous feed of data containing the real time occupancy 
+of public parking garages
 in Ghent found [here](https://data.stad.gent/explore/dataset/bezetting-parkeergarages-real-time/information/).
 The data is updated every couple of minutes. We will use this data set as an example because it
 allows us to showcase what LDES is made for: replicating a (historical) data set and synchronize
-updates on a continuous basis. In addition, the data set also contains geographical information
+updates on a continuous basis. In addition, the data set contains geographical information
 which will allow us to showcase the ability to retrieve a subset of data based on geography in
 addition to the time axis. Because the dataset grows very rapidly, we will show how to keep storage
 under control.
-For simplicity we will start with a simple linked data model and migrate it to an official linked
+For simplicity, we will start with a basic linked data model and migrate it 
+to an official linked
 data vocabulary to allow ingesting another data set from the same domain
 found [here](https://data.stad.gent/explore/dataset/bezetting-parkeergarages-real-time/information/)
 in the same LDES.
@@ -32,7 +34,8 @@ mind and feel like diving into the wonderful world of linked data and RDF.
 
 ### Bash
 
-In order to run the commands in the tutorials you will to run them in a bash shell. On Windows, you
+In order to run the commands in the tutorials you will need to run them in a 
+bash shell. On Windows, you
 need to use the [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/about).
 This is also needed for Docker (see later). On MacOS, you can use the standard Z shell (zsh) but you
 may bump into some minor syntactic issues so it is better to use a bash shell. Finally, on Linux,
@@ -41,7 +44,8 @@ the bash shell is available by default.
 ### Your favorite editor
 
 You can use any editor or development environment that you like to look at the source files.
-However, your favorite editor and its open source alternatives offer a few nice features,
+However, your favorite editor and its open source alternatives offer a few 
+nice features,
 such as previewing this and other markdown files as well as to
 manage [Docker](https://code.visualstudio.com/docs/containers/overview)
 and [Git](https://code.visualstudio.com/docs/sourcecontrol/overview) from within the environment.
@@ -84,7 +88,7 @@ if you are already familiar with some topics.
   data before ingesting it)
 * [Publishing as a standard linked open data model](./advanced-conversion/README.md) (using a
   standard vocabulary for publication)
-* [Publishing a protected LDES](./protected-setup/README.md) (limitting access to a LDES)
+* [Publishing a protected LDES](./protected-setup/README.md) (limiting access to a LDES)
 * [Publishing an enriched data model](./enrich-model/README.md) (combining linked data models)
 
 ### Tutorials for Data Clients
