@@ -54,7 +54,8 @@ Lucky for you we have already done the hard part of creating a LDES Client, whic
 available component that allows us to, given a LDES or a view, request the view node or any linked
 node, extract each member from the node and follow the links in each node in order to collect all
 members and in fact _replicate_ the LDES. In addition, the LDES Client will also look at the node
-properties which are lokated in the HTTP headers and re-request the nodes that can change over time,
+properties which are located in the HTTP headers and re-request the nodes 
+that can change over time,
 both nodes structure and nodes containing members. By doing this we can _synchronize_ the LDES.
 
 The LDES CLient component is packaged as

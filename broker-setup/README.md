@@ -1,15 +1,15 @@
 # Republishing an Existing LDES
 
 This tutorial will show you (as a Data Publisher or a Data Broker) how you can offer different views
-on a LDES while still keeping your storage and bandwidth costs under control. It will show you how
+on an LDES while still keeping your storage and bandwidth costs under control. It will show you how
 these views can be _fragmented_ in one or more ways and how you can control the _retention_ of
 members of the available data collections.
 
 ## Organise, Every Other Day I Organize
 
-When offering data collections as a LDES, a Data Publisher cannot know all possible use cases of
+When offering data collections as an LDES, a Data Publisher cannot know all possible use cases of
 its Data Clients in advance. Therefore a Data Publisher may simply provide a paged view on the LDES.
-This allows for fully replicating and synchronizing a LDES in a partitioned way. If such a LDES is
+This allows for fully replicating and synchronizing an LDES in a partitioned way. If such a LDES is
 based on a data collection that continuously grows, a couple of problems may arise.
 
 Depending on the nature of data collection, the LDES may grow slowly or very fast to a large or even
@@ -22,7 +22,7 @@ LDES) itself. The LDES Server will periodically schedule a _background maintenan
 executes a few steps to verify which members should be removed from the views and/or from the LDES
 itself.
 
-The _retention step_ enforce all retention policies on a view and removes the members for which no
+The _retention step_ enforces all retention policies on a view and removes the members for which no
 retention policy applies from a view fragment. During the _compaction step_ the LDES Server verifies
 how many members are left in related view fragments after retention policy application and, if
 needed, compacts these fragments by creating new fragments and putting an expiration time on the old
@@ -42,7 +42,7 @@ section of the LDES Server documentation.
 
 > **Note** that the retention policies do not limit what a Data Client can retrieve but instead
 > limit how long members are available. For example, if a retention policy exists with a sliding
-> windows of one week, a LDES Client that starts to follow a LDES today can replicate one week of
+> windows of one week, an LDES Client that starts to follow an LDES today can replicate one week of
 > history, while a Data Client that starts to follow it in a couple of days will not be able to
 > replicate the oldest couple of days anymore as these members will effectively have been deleted (
 > depending on how often the background tasks run).
@@ -52,16 +52,16 @@ the [compaction of fragments](https://openldes.github.io/LDESServer/latest/featu
 and the deleting of obsolete members helps to keep the storage size requirements as well as the
 bandwidth costs under control.
 
-Note that a paged view still requires a LDES CLient to fully replicate and synchronize _all_
+Note that a paged view still requires an LDES CLient to fully replicate and synchronize _all_
 members. But sometimes you only need a part of a data set. For this reason the LDES Server offers a
 few different types of fragmentations.
 
 > **Note** that a paged view is not considered a fragmentation but rather a way to retrieve a data
 > collection fully in parts. In other words, no matter if you fragment or not, you always replicate
-> and synchronize a LDES in a partitioned way.
+> and synchronize an LDES in a partitioned way.
 
 Currently, the LDES server offers three fragmentation strategies: a fragmentation that structures
-its members according to a hierarchical division of time (_Timed based Fragmentation_), a
+its members according to a hierarchical division of time (_Timed-based Fragmentation_), a
 fragmentation that organizes its members according to their geographical properties (e. g. location)
 mapped onto a geo-spatial tiling system (_Geo-spatial Fragmentation_) and a fragmentation which uses
 a member property that resolves to an object reference effectively grouping members together with
@@ -69,7 +69,7 @@ the same property value (_Reference Fragmentation_). For details
 see [LDES Fragmentations](https://openldes.github.io/LDESServer/latest/configuration/fragmentations/index).
 
 > **Note** that the _Reference Fragmentation_ can be used to group members together according to
-> their type(s) allow to replicate and synchronize one type from a multi-typed LDES (i. e. a LDES
+> their type(s), allowing replication and synchronization of one type from a multi-typed LDES (i. e. an LDES
 > which contains a data collection with entities of different types).
 
 ### Time Is Like a Clock in My Heart
@@ -114,7 +114,7 @@ You can also visualize the position of a WKT POINT with [WKT map](https://wktmap
 ### Just for Reference, I Stayed the Same
 
 [Reference fragmentation](https://openldes.github.io/LDESServer/latest/configuration/fragmentations/reference)
-is very similar to the geo-spatial one as it is also only two level: a root level and a list of
+is very similar to the geo-spatial one as it is also only two levels: a root level and a list of
 possible values for the configured property (e. g. all available types, all available entities, all
 members that have a certain category, etc.). The result looks something like this:
 
@@ -136,7 +136,7 @@ setup would look something like this:
 
 Fig. 5 - Data Broker Setup
 
-In this tutorial we will show you how to setup the above starting from
+In this tutorial we will show you how to set up the above starting from
 the [Publishing as a standard open linked data model](./advanced-conversion/README.md) tutorial and
 combining it partially with the [Setting up a minimal LDES Client](./minimal-client/README.md)
 tutorial.
@@ -234,7 +234,7 @@ publisher-workbench:
 
 ### So Long, I’ve Been Looking Too Hard
 
-The Data Broker workbench is based on a LDES Client which replicates and synchronizes the LDES
+The Data Broker workbench is based on an LDES Client which replicates and synchronizes the LDES
 exposed by the Data Publisher LDES Server (`http://broker-server/ldes/occupancy`). Other than that,
 the workbench and server services are the same as usual (we did add retention,
 see [later](#ive-been-waiting-too-long)):
@@ -334,15 +334,15 @@ our WKT value.
 > the other data. This is possible because in the transformation step we specified that the
 > transformation is cumulative (`infer: true`).
 
-The resulting [workbench pipeline](./broker-workbench/seed/client-pipeline.yml) then send the
+The resulting [workbench pipeline](./broker-workbench/seed/client-pipeline.yml) then sends the
 modified members to the Data Broker LDES Server (`endpoint: http://broker-server/ldes/occupancy`).
 
 ### I’ve Been Waiting Too Long
 
 OK, we have not been completely honest with you: we did change the LDES view configuration of the
-Data Publisher a bit because in real-life you will never want to create a LDES which grows
+Data Publisher a bit because in real-life you will never want to create an LDES which grows
 indefinitely, would you? We added a retention policy with a sliding window (of one year) on the LDES
-definition by adding a retention policy::
+definition by adding a retention policy:
 
 ```Turtle
 </occupancy> a ldes:EventStream ;
@@ -380,7 +380,7 @@ a [view definition](./publisher-server/definitions/occupancy.by-page.ttl):
 The real added-value we offer in the Data Broker are the _additional fragmentations_. We do not
 offer a paged view because the original LDES already offers such a view with a big history. Instead,
 we add fragmentations that allow our Data Clients to partially replicate and synchronize the data
-collection. Say what, _partially_? Yes, _partially_. The essence of a LDES view is that it always
+collection. Say what, _partially_? Yes, _partially_. The essence of an LDES view is that it always
 contains _all_ members of the data collection, no matter how it is fragmented (or simply partitioned
 using a paged view). So, if a client needs all members there is no point in using any of our views
 as you can get them from the original Data Publisher's paged view. But, of course, if you need a
@@ -423,7 +423,7 @@ ldes:retentionPolicy [
     `tree:maxGranularity "hour"`.
 > * we set the `tree:pageSize` of the view to 50 members which does not affect our structure nodes
     but does limit the number of members returned per page node.
-> * for this view we chose to offer at most 7 minutes of data by definiting a sliding time window
+> * for this view we chose to offer at most 7 minutes of data by defining a sliding time window
     retention policy `ldes:DurationAgoPolicy` with the `tree:value` specified as
     a [ISO8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations).
 
@@ -454,7 +454,7 @@ ldes:retentionPolicy [
 > * we chose a `tree:pageSize` of 100 this time (just because we can).
 > * again, we chose time fragmentation based on a sliding time window (of 5 minutes).
 
-Finally, we also allow to retrieve data of a single parking lot by using its idenfier. For that we
+Finally, we also allow to retrieve data of a single parking lot by using its identifier. For that we
 use a [reference fragmentation](#just-for-reference-i-stayed-the-same) and configure
 a [by-parking definition](./broker-server/definitions/occupancy.by-parking.ttl):
 
@@ -476,7 +476,7 @@ ldes:retentionPolicy [
 > **Notes**:
 > * this time we use a `tree:ReferenceFragmentation` on the member's `terms:isVersionOf` property
     and use `parking-lot` in the URLs.
-> * we limit the history to the most recent occupancy values by using using retention policy
+> * we limit the history to the most recent occupancy values by using retention policy
     `ldes:LatestVersionSubset` with `ldes:amount 3`.
 > * we keep at most 15 members per parking lot and fit all of them into one page by setting
     `tree:pageSize "15"^^xsd:integer`.
@@ -493,7 +493,7 @@ retrieve them. Not very useful. So we need to define at least one view. If this 
 specify a retention policy the data collection becomes available but will continue to grow
 indefinitely. At some point our storage and bandwidth costs will rise to an unacceptable amount and
 guess who will get fired?! OK, so we add a retention policy to our view as shown earlier. Crisis
-diverted!
+averted!
 
 So, we now know that we can add and remove views as we see fit at any time. Now what happens if we
 add multiple views to our server? How do the different retention policies interact? How long will
@@ -515,7 +515,7 @@ members and defines how long a member is physically stored. So the retention pol
 event source) are needed to actually release storage space. And as you may expect, the deletion step
 will cleanup all expired members as well.
 
-> **Note** that if you mark the retention of members in the LDES (event source) to be shorter that
+> **Note** that if you mark the retention of members in the LDES (event source) to be shorter than
 > the retention on its views, obviously the members will be physically deleted and as such also
 > removed from all views of that LDES. So, please ensure you define your event source policies to
 > keep
@@ -559,7 +559,7 @@ background maintenance task which is scheduled according to a customizable sched
 
 ### Parole, Parole, Parole
 
-Enough theory, its show-time!
+Enough theory, it's show time!
 
 For this tutorial we defined the retention periods of the views as follows:
 

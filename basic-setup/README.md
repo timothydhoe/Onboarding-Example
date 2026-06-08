@@ -1,8 +1,9 @@
 # Publishing a Simple Data Set With a Basic Setup
 
 This quick start guide will show you how to combine
-a [LDIO Workbench](https://openldes.github.io/Linked-Data-Interactions/) and
-a [LDES Server](https://openldes.github.io/LDESServer/) to create a basic setup for
+an [LDIO Workbench](https://openldes.github.io/Linked-Data-Interactions/) and
+an [LDES Server](https://openldes.github.io/LDESServer/) to create a basic 
+setup for
 publishing [linked data](https://en.wikipedia.org/wiki/Linked_data) as
 a [Linked Data Event Stream (LDES)](https://semiceu.github.io/LinkedDataEventStreams/).
 
@@ -12,7 +13,8 @@ an overview of all examples.
 ## All the Things We Need
 
 In order to publish your data set as an LDES, you will need to set up and configure a few systems.
-To start with, you need a LDES Server. It will accept, store and serve the data set. It will also
+To start with, you need an LDES Server. It will accept, store and serve the 
+data set. It will also
 create version objects from your data set, which typically consists of state objects.
 In addition, as your data set will typically not be linked data, you will have to create a small
 pipeline in the workbench to transform your custom data model formatted in whatever
@@ -21,8 +23,10 @@ model from several [RDF](https://en.wikipedia.org/wiki/Resource_Description_Fram
 serializations and serve the event stream in any of
 those [RDF formats](https://en.wikipedia.org/wiki/Resource_Description_Framework#Serialization_formats).
 
-Let's start by creating a [Docker Compose](https://docs.docker.com/compose/) file containing a LDES
-server, its [Postgres](https://www.postgresql.org/) storage container and a LDIO Workbench. First,
+Let's start by creating a [Docker Compose](https://docs.docker.com/compose/) 
+file containing an LDES
+server, its [Postgres](https://www.postgresql.org/) storage container and an 
+LDIO Workbench. First,
 we start by naming the file `docker-compose.yml` and add the file version and a private network
 which allows our three systems to interact:
 
@@ -53,7 +57,8 @@ services:
       - basic-setup
 ```
 
-After that we add a LDES Server as a service, point it to its configuration file using volume
+After that we add an LDES Server as a service, point it to its configuration 
+file using volume
 mapping, expose its port so we can retrieve the event stream, set some environment variables (see
 [later](#ldes-server-environment-settings)) and set it to depend on the storage container to delay
 starting the server container until the storage container is ready:
@@ -83,7 +88,8 @@ starting the server container until the storage container is ready:
       test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://ldes-server:8080/ldes/actuator/health" ]
 ```
 
-Finally, we add a LDIO Workbench as a service. It needs to have access to its configuration file,
+Finally, we add an LDIO Workbench as a service. It needs to have access to 
+its configuration file,
 which we again provide using volume mapping. We also need to expose the workbench listener port so
 we can feed it with models from our custom data set.
 
@@ -164,7 +170,7 @@ In our minimal workbench tutorial we assumed that we had linked data and we POST
 formatted as [JSON-LD](https://json-ld.org/) to the workbench. Usually, you will have data in a more
 traditional (non-linked data) model. Typically, there will be an API that you can poll, or maybe the
 source system will notify you of changes using messages. No matter if the interface is pull-driven
-or push-driven, the data will be format using JSON, XML, CSV or similar.
+or push-driven, the data will be formatted using JSON, XML, CSV or similar.
 
 Now, let's assume that on the input side we have a [JSON message](./data/message.json), that is
 pushed into the workbench pipeline. We need to turn this non-linked data into linked-data. To
@@ -178,7 +184,8 @@ Now that we have everything set up, let's test the systems. We need to bring all
 for both the LDIO Workbench and LDES Server to be available, send the LDES and view definitions to
 the server and finally send the JSON message to the workbench.
 
-Then we can retrieve the LDEs, the view and the page containing the actual member.
+Then we can retrieve the LDES, the view and the page containing the actual 
+member.
 
 To run the systems, wait, send definitions and message (execute in a **bash** shell):
 
@@ -223,18 +230,21 @@ curl "http://localhost:9003/ldes/occupancy/by-page?pageNumber=1"
 ```
 
 > **Note** that we explicitly noted the three steps to get to the data. Typically, a system that
-> wants to replicate and synchronize a LDES only needs access to the LDES itself and can discover
+> wants to replicate and synchronize an LDES only needs access to the LDES 
+> itself and can discover
 > the view and subsequently the pages of that view by following the links in the LDES and view. To
 > do
-> so, we can use a
+> so, we can use an
 > [LDES Client](https://openldes.github.io/Linked-Data-Interactions/core/ldi-inputs/ldes-client)
 > but that is a different tutorial.
 
 ## The Party is Over, Let's Go Home
 
-You should now know how to publish a simple data set using a LDES Workbench and use a LDES Server to
+You should now know how to publish a simple data set using an LDES Workbench 
+and use an LDES Server to
 serve this data set using LDES. You learned how to set up a Docker compose file from scratch, how to
-configure the LDES Server on a different path and port, how to configure a LDIO Workbench to accept
+configure the LDES Server on a different path and port, how to configure an 
+LDIO Workbench to accept
 non-linked data and send it to the LDES Server. You can now stop all the systems.
 
 To bring the containers down and remove the private network:

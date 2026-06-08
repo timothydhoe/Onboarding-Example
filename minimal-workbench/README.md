@@ -19,7 +19,7 @@ an object in a non-linked data way. That is why a data transformation is needed.
 Such a data transformation can be standalone or as part of a data transformation pipeline which can
 be built in various ways with many different data processing systems.
 
-One such a workbench that allows creating data pipelines
+One such workbench that allows creating data pipelines
 is [Apache NiFi](https://nifi.apache.org/). This is a mature and solid open-source solution that
 comes with many features, allows for horizontal scaling and comes with many standard processors for
 creating and monitoring complex data pipelines. However, it also comes with a steep learning curve
@@ -29,22 +29,26 @@ The Linked Data Interactions Orchestrator
 ([LDIO](https://openldes.github.io/Linked-Data-Interactions/)) is a simple and more
 light-weight solution that eases the process of creating more straightforward, linear data
 transformations while requiring minimal resources and attempting to keep the learning curve as low
-as possible. It is by no means a silver bullet, but experience has learned us that most data
+as possible. It is by no means a silver bullet, but experience has taught us 
+that most data
 publishing use cases can easily be covered with a simple linear pipeline, and as such LDIO usually
 suffices.
 
 LDIO allows creating one or more synchronous linear pipelines that convert non-linked data to
 linked data (state or version objects) that can be ingested by an LDES Server. It is centered around
-the concept of one input source with an adaptor to convert to linked data, one or more in-memory
+the concept of one input source with an adapter to convert to linked data, 
+one or more in-memory
 transformation steps and sending the result to one or more output sinks.
 
 Various input components are available for starting a pipeline such as: accepting HTTP messages both
 using a push model (HTTP listener) and a pull model (HTTP poller), reading from Kafka, etc.
 
-If the source data is already linked data, you can use a simple RDF adaptor which allows parsing
+If the source data is already linked data, you can use a simple RDF adapter 
+which allows parsing
 various RDF serializations. If the source data is not yet linked data, you can use either a JSON-LD
-adaptor to attach a JSON-LD context to a JSON message or alternatively a RML adaptor, which allows 
-creating linked data from various other message formats, such as JSON, XML, CSV, etc.
+adapter to attach a JSON-LD context to a JSON message or alternatively an 
+RML adapter, which allows creating linked data from various other message 
+formats, such as JSON, XML, CSV, etc.
 
 On the output side we also provide several possibilities such as POST-ing using HTTP, writing to
 Kafka, etc.
@@ -61,7 +65,8 @@ stable releases can be found [here](https://hub.docker.com/r/openldes/ldi-orches
 
 ## Configure Your First Pipeline
 
-The example [docker compose file](./docker-compose.yml) only contains a LDIO service which runs in a
+The example [docker compose file](./docker-compose.yml) only contains an 
+LDIO service which runs in a 
 private network and uses volume mapping to have its configuration file available in the container.
 As we will see in a minute, the pipeline starts with an HTTP listener, and therefore we need a port
 mapping to allow the workbench to receive HTTP messages.
@@ -77,8 +82,8 @@ port mapping): http://localhost:9004/occupancy-pipeline. After that the definiti
 the input component and associated adapter, the (optional) transformation steps and the output(s).
 Let's look at these in more detail.
 
-The input component simply states that it is a HTTP listener which uses a RDF adaptor and as such is
-expecting Linked Data:
+The input component simply states that it is an HTTP listener which uses an 
+RDF adapter and as such is expecting Linked Data:
 
 ```yaml
 input:
@@ -133,7 +138,7 @@ which returns:
 
 ## You've Got Mail
 
-Now that the workbench and the pipeline is up and running we can send
+Now that the workbench and the pipeline are up and running we can send
 a [message](./data/message.jsonld) through the pipeline and see its version object outputted to the
 workbench logs. We use the following simple JSON-LD message (clipped to the relevant parts):
 
@@ -163,10 +168,10 @@ To send the message into the pipeline:
 curl -X POST -H "Content-Type: application/ld+json" "http://localhost:9004/occupancy-pipeline" -d "@./data/message.jsonld"
 ```
 
-Since it is a small and straight forward message the workbench log will almost immediately contain
+Since it is a small and straightforward message the workbench log will almost immediately contain
 the version object.
 
-To watch the version object appear in the workbench log
+To watch the version object appear in the workbench log:
 
 ```bash
 docker logs -n 24 $(docker compose ps -q ldio-workbench)
@@ -203,7 +208,8 @@ You should see the following:
 ## That's All Folks
 
 You now know how to configure a basic LDIO workbench which takes in RDF messages containing a single
-state object and turn it into a version object that can be ingested as a LDES member.
+state object and turns it into a version object that can be ingested as a 
+LDES member.
 
 To bring the containers down and remove the private network:
 

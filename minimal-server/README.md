@@ -1,7 +1,7 @@
 # Setting Up a Minimal LDES Server
 
-This quick start guide will show you how to setup a minimal LDES server to accept linked data
-members.
+This quick start guide will show you how to set up a minimal LDES server to 
+accept linked data members.
 
 Please see the [introduction](../README.md) for the example data set and pre-requisites, as well as
 an overview of all examples.
@@ -9,7 +9,8 @@ an overview of all examples.
 ## Enter the LDES Server
 
 The [LDES Server](https://openldes.github.io/LDESServer/) main purpose is to accept data
-set members, store them in external storage and allow to retrieve the data set as a LDES for
+set members, store them in external storage and allow the client to retrieve 
+the data set as an LDES for
 replication as a whole or just a subset of the data set. However, the real benefit of LDES lies in
 its ability to allow Data Clients to keep in sync with changes that occur on the data set.
 
@@ -31,7 +32,8 @@ The Docker images are available
 on [Docker Hub](https://hub.docker.com/r/openldes/ldes-server). [Here](https://hub.docker.com/r/openldes/ldes-server/tags)
 you can find the stable releases. Notice that some tags end with `-SNAPSHOT`. These images can
 safely be used. The only difference with the ones without this label is that validity with the
-official specification did not yet occur. Functionality, they are exactly the same. A new image is
+official specification did not yet occur. Functionally, they are exactly the 
+same. A new image is
 created and labeled with [semantic versioning](https://semver.org/). You can expect backwards
 compatible images to keep the same major version number and have an increased minor version number.
 Very occasionally we create a patch release with a non-zero patch number.
@@ -41,17 +43,16 @@ Very occasionally we create a patch release with a non-zero patch number.
 > created of our development branch. Please use these only if really needed as they can and will
 > contain some issues.
 
-## Setup Up the Basics
+## Setting Up the Basics
 
 As mentioned in the pre-requisites, you need some minimal knowledge on Docker Compose as we use it
 to run both the LDES Server and the required data storage system as a container. Currently we only
 support [Postgres](https://www.postgresql.org/) for storing the LDES members and other data.
-On [Docker Hub](https://hub.docker.com/_/postgres) you can found
+On [Docker Hub](https://hub.docker.com/_/postgres) you can find
 the [container images](https://hub.docker.com/_/postgres/tags). In the future we may add other
 databases.
 
-If you look into the [Docker Compose file](./docker-compose.yml), you will see that we define one (
-private) network for our two services: the LDES Server and the Postgres database. This allows the
+If you look into the [Docker Compose file](./docker-compose.yml), you will see that we define one (private) network for our two services: the LDES Server and the Postgres database. This allows the
 LDES Server to refer to the Postgres database by its service name `ldes-postgresdb` but also
 requires us to map the internal port numbers (respectively 8080 and 5432) to external port numbers (
 respectively 9003 and 5432) in order to be able to reach the services (respectively
@@ -66,7 +67,8 @@ The Docker Compose file also contains some environment variables. The `SPRING_DA
 a [JDBC](https://en.wikipedia.org/wiki/Java_Database_Connectivity) connection string that ties the
 LDES Server to our Postgres database. Note that the format is
 `jdbc:<scheme>://<server>:<port>/<database>` where the `<scheme>` is always `postgres`, the
-`<server>` is the service name of our datbase system (i.e. `ldes-postgresdb`), the `<port>` is the
+`<server>` is the service name of our database system (i.e. 
+`ldes-postgresdb`), the `<port>` is the
 default port number `5432`, and finally, `<database>` is the name of the database that will hold our
 LDES data, for which we chose `minimal-server`. We also specify the external base path of our LDES
 Server (`LDESSERVER_HOSTNAME`) so that the links within the LDES can be followed. Because of the
@@ -99,7 +101,8 @@ To launch the LDES Server and the Postgres containers:
 docker compose up -d --wait
 ```
 
-> **Note** that we start the containers as deamons and then wait for the LDES server to be available
+> **Note** that we start the containers as daemons and then wait for the LDES 
+> server to be available
 > by using the Docker
 >
 Compose [health check attribute](https://docs.docker.com/compose/compose-file/05-services/#healthcheck).
@@ -179,7 +182,8 @@ curl -X POST -H "content-type: text/turtle" "http://localhost:9003/admin/api/v1/
 
 The view definition is a turtle file very similar to the LDES definition. It contains the view
 definition (it is a tree node) and how to get to this view (`</occupancy/by-page> a tree:Node`). It
-set the number of members per fragment (`tree:pageSize "50"^^xsd:integer`). That's all folks!
+sets the number of members per fragment (`tree:pageSize "50"^^xsd:integer`). 
+That's all folks!
 
 To check out our LDES:
 

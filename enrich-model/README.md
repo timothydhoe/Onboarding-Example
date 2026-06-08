@@ -172,7 +172,7 @@ WHERE {
 ```
 What is this magic? Well, we select all triples containing a relation (`schema:hasCar`) between the person (i.e. person subject `?ps`) and a car (i.e. car subject `?cs`). For each car (`?cs`) we execute a SPARQL federated query (`SERVICE <endpoint> { ... }`) to select all its triples (`?cs ?cp ?co .` where `?cs` is the URI of the car) from our graph database (`http://graph-database:8080/rdf4j-server/repositories/cars`). That's it. Clean and simple!
 
-Now that we have combine the person with the car data we forward it to our sink system. You can find the complete pipeline [here](./definitions/people-pipeline.yml).
+Now that we have combined the person with the car data we forward it to our sink system. You can find the complete pipeline [here](./definitions/people-pipeline.yml).
 
 ## And I’m Picking Up the Pieces
 We have the solution in place now and can launch the systems, configure them and seed the cars collection:

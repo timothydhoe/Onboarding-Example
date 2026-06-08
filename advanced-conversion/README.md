@@ -32,29 +32,30 @@ Understanding and mapping our
 (check out the dataset schema) to the
 [target model](https://raw.githubusercontent.com/vocol/mobivoc/develop/diagrams/mobivoc_v1.1.4.png)
 is the hard part, in particular if we are missing descriptions for the model structure and its
-properties. Lucky for us, most of the property names are more-or-less self-explanatory.
+properties. Luckily for us, most of the property names are more-or-less 
+self-explanatory.
 
-| source property         | meaning                                                                     |
-|-------------------------|-----------------------------------------------------------------------------|
-| name                    | descriptive name                                                            |
-| lastupdate              | timestamp when last updated                                                 |
-| type                    | type of parking facility, `offStreetParkingGround` or `carPark`             |
-| description             | description                                                                 |
-| id                      | the id of the parking, in URI format                                        |
-| openingtimesdescription | description of opening times                                                |
-| isopennow               | is parking currently open? specified as boolean: yes = 1, no = 0            |
-| temporaryclosed         | is parking temporary closed? (boolean)                                      |
-| operatorinformation     | description of company operating the parking                                |
-| freeparking             | is parking freely accessable? (boolean)                                     |
-| urllinkaddress          | webpage URL of the parking offering more information                        |
-| totalcapacity           | total number of spaces (capacity)                                           |
-| availablecapacity       | available number of spaces                                                  |
-| occupancytrend          | ?                                                                           |
+| source property         | meaning                                                                |
+|-------------------------|------------------------------------------------------------------------|
+| name                    | descriptive name                                                       |
+| lastupdate              | timestamp when last updated                                            |
+| type                    | type of parking facility, `offStreetParkingGround` or `carPark`        |
+| description             | description                                                            |
+| id                      | the id of the parking, in URI format                                   |
+| openingtimesdescription | description of opening times                                           |
+| isopennow               | is parking currently open? specified as boolean: yes = 1, no = 0       |
+| temporaryclosed         | is parking temporary closed? (boolean)                                 |
+| operatorinformation     | description of company operating the parking                           |
+| freeparking             | is parking freely accessible? (boolean)                                |
+| urllinkaddress          | webpage URL of the parking offering more information                   |
+| totalcapacity           | total number of spaces (capacity)                                      |
+| availablecapacity       | available number of spaces                                             |
+| occupancytrend          | ?                                                                      |
 | occupation              | amount of occupied spaces expressed as a rounded percentage of the capacity |
-| location                | geo point position of the parking                                           |
-| locationanddimension    | JSON object with information of the parking                                 |
-| categorie               | inside or outside low emmission zone (LEZ)                                  |
-| dashboard               | ?                                                                           |
+| location                | geo point position of the parking                                      |
+| locationanddimension    | JSON object with information of the parking                            |
+| categorie               | inside or outside low emission zone (LEZ)                              |
+| dashboard               | ?                                                                      |
 
 As you can see, except for a few, we have a pretty good idea of the meaning of the properties.
 Obviously, we should double-check our assumptions with the publisher of this data. For this
@@ -103,8 +104,7 @@ knowledge.
 
 Great! We have determined what will be mapped and how. We're done. Well, not quite. There is one
 more thing we need: an identity for our entity. It has to be a URI, and obviously it needs to be
-unique. In addition, for every update of the available spaces, the identity should remain the same (
-duh!). So, what do we use for the identity? One possible option is to take the `id`
+unique. In addition, for every update of the available spaces, the identity should remain the same (duh!). So, what do we use for the identity? One possible option is to take the `id`
 value. It would work as long as the Data Owner does not decide to relocate it. The best option is to
 check with the Data Owner, but for this tutorial we'll continue on the assumption that the
 `id` will not change.
@@ -334,7 +334,7 @@ temp:TriplesMap a rr:TriplesMap;
 ### Pirates Like GeoJSON For Dinner
 
 The [GeoJSON mapping](./definitions/geojson-pipeline.yml#L11) is very similar to
-the [JSON mapping](./definitions/json-pipeline.yml#L11). Allthough the GeoJSON structure is centered
+the [JSON mapping](./definitions/json-pipeline.yml#L11). Although the GeoJSON structure is centered
 around `features` which contain a `geometry` and `properties` we can get away with ignoring the
 `geometry` as the `properties` also contain the `latitude` and `longitude` values. Basically we can
 iterate the elements in the `features` array and select the `properties`:
@@ -392,7 +392,7 @@ CONSTRUCT {
 > **Tip** you can test SPARQL CONSTRUCT and SPARQL SELECT queries in
 > the [SPARQL Playground](https://atomgraph.github.io/SPARQL-Playground/)
 
-Not too difficult to understand: in, the `where` part we select values from the intermediate model
+Not too difficult to understand: in the `where` part we select values from the intermediate model
 and put them in variables. We then use those variables to create the target model in the `construct`
 part.
 
@@ -510,7 +510,8 @@ CONSTRUCT {
 }
 ```
 
-Our target model is a bit more structured that our intermediate model, so at times we need to
+Our target model is a bit more structured than our intermediate model, so at 
+times we need to
 introduce an intermediate relation to some structure. Take for example the capacity. In
 the [model diagram](https://raw.githubusercontent.com/vocol/mobivoc/develop/diagrams/mobivoc_v1.1.4.png),
 we see that a _civic structure_ has a relation _has capacity_ to a _Capacity_ object that has a
@@ -655,7 +656,7 @@ if the shared (sub)-state was not de-duplicated. However, in our opinion, this d
 message containing a dangling or shared blank node results in the message being refused. After this
 validation, the LDES Server creates a *new version* for *each* named node (i.e. state object) after
 grouping together all RDF statements (triples) that directly or indirectly (blank nodes) belong to
-that model (i.e. it recusively follows are referenced blank nodes).
+that model (i.e. it recursively follows referenced blank nodes).
 
 > **Note** that we emphasized that you can ingest state objects in *bulk* and that the LDES Server
 > creates a version *each* time!
@@ -695,8 +696,10 @@ OK, time for a summary! The rules are really simple:
    version objects in the pipeline based on this timestamp and send these versions to the LDES
    Server.
 3. If your source system pushes complete state but there is no timestamp you can use, let the LDES
-   Server create a new version each time. Not ideal because too many version will exist negatively
-   impacting storage. You can control the number of versions by using retention but their will still
+   Server create a new version each time. Not ideal because too many 
+   versions will exist negatively
+   impacting storage. You can control the number of versions by using 
+   retention but there will still
    be many identical version object for a model. In addition, downstream (destination) systems will
    receive too many updates and have to cope with that.
 4. If your workbench pipeline polls for object model changes (API allow some sort of change
@@ -851,7 +854,7 @@ the [CSV pipeline](./definitions/csv-pipeline.yml) and start
 the [JSON pipeline](./definitions/json-pipeline.yml) or
 the [GeoJSON pipeline](./definitions/geojson-pipeline.yml).
 
-To stop the a pipeline use, e.g. the CSV pipeline:
+To stop a pipeline use, e.g. the CSV pipeline:
 
 ```bash
 curl -X POST http://localhost:9004/admin/api/v1/pipeline/csv-pipeline/halt
@@ -901,7 +904,7 @@ curl "http://localhost:9003/ldes/occupancy/by-page?pageNumber=1"
 ```
 
 You can also simply look at the workbench docker logs file to verify that the members have been
-created and send to the LDES server:
+created and sent to the LDES server:
 
 ```bash
 docker logs -f $(docker compose ps -q ldio-workbench)

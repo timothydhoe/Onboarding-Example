@@ -14,7 +14,7 @@ The LDES Server allows you to ingest a data collection and offers one or more vi
 replicating the data collection in whole or a part of it. However, not all data collections can be
 made publicly available. You need to protect those data collections in some way to prevent
 unauthorized access. What you will typically do is configure some security system that expects a
-Data Client to identify itself (_authentication_) after which the security system verifies it the
+Data Client to identify itself (_authentication_) after which the security system verifies that the
 Data Client has access to the requested data (_authorization_).
 
 The LDES Server does not include such a security system because there are various ways for doing
@@ -448,7 +448,7 @@ curl -I -H "x-api-key: admin-secret" "http://localhost:9005/admin/api/v1/eventst
 
 Now all calls succeed. Great!
 
-We need to verify one more rule: nobody (not even an administrator!) should we be able to send data to
+We need to verify one more rule: nobody (not even an administrator!) should be able to send data to
 the ingest endpoint of the LDES server:
 
 ```bash

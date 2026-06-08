@@ -28,7 +28,7 @@ In fact, the pipeline configuration is the only thing we need in addition to a d
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://ldio-workbench:8080/actuator/health"]
 ```
-> **Note** that we included a health check for our workbench so we can verify when it is initialized and ready. We put it in the same network as our sink system and add a dependancy to ensure the sink system is fully available to accept the LDES members. We also expose the workbench using port mapping because we need to provide it with a LDES Client pipeline.
+> **Note** that we included a health check for our workbench so we can verify when it is initialized and ready. We put it in the same network as our sink system and add a dependency to ensure the sink system is fully available to accept the LDES members. We also expose the workbench using port mapping because we need to provide it with a LDES Client pipeline.
 
 Your backend systems will typically already exist but for this tutorial we use a simple message sink backed by a database, as you can see in the [docker compose](./docker-compose.yml#L28) file.
 
@@ -87,7 +87,7 @@ outputs:
 ```
 
 ## So Long, Folks
-You can wait until the full LDES is replicated and than bring all systems down or you can interrupt the LDES client earlier using:
+You can wait until the full LDES is replicated and then bring all systems down or you can interrupt the LDES client earlier using:
 ```bash
 docker compose down
 ```
